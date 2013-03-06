@@ -1,15 +1,20 @@
 package tschrock.mc.skypecraft;
 
+import tschrock.mc.skypecraft.commands.*;
+
 import com.skype.Call;
 import com.skype.CallAdapter;
 import com.skype.ChatMessage;
 import com.skype.ChatMessageAdapter;
+import com.skype.CommandFailedException;
 import com.skype.Skype;
+import com.skype.SkypeClient;
 import com.skype.SkypeException;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
 import cpw.mods.fml.common.*;
+import cpw.mods.fml.common.Mod.ServerStopping;
 import cpw.mods.fml.common.Mod.*;
 import cpw.mods.fml.common.event.*;
 
@@ -18,17 +23,18 @@ public class SkypeCraft
 {
         @PreInit
         public void preInit(FMLPreInitializationEvent event) {
-
         }
 
         @Init
         public void load(FMLInitializationEvent event) {
         	
         	//register commands        	
-        	tschrock.mc.clientcommands.mod_ClientCommands.getInstance().registerCommand(new Command_SHelp());
-        	tschrock.mc.clientcommands.mod_ClientCommands.getInstance().registerCommand(new Command_SList());
-        	tschrock.mc.clientcommands.mod_ClientCommands.getInstance().registerCommand(new Command_STell());
-        	tschrock.mc.clientcommands.mod_ClientCommands.getInstance().registerCommand(new Command_SCall());
+        	tschrock.mc.clientcommands.mod_ClientCommands.getInstance().registerCommand(new Shelp());
+        	tschrock.mc.clientcommands.mod_ClientCommands.getInstance().registerCommand(new Slist());
+        	tschrock.mc.clientcommands.mod_ClientCommands.getInstance().registerCommand(new Stell());
+        	tschrock.mc.clientcommands.mod_ClientCommands.getInstance().registerCommand(new Scall());
+        	tschrock.mc.clientcommands.mod_ClientCommands.getInstance().registerCommand(new Sstatus());
+        	tschrock.mc.clientcommands.mod_ClientCommands.getInstance().registerCommand(new Sanswer());
         	
         	//set up event listeners
         	try {
@@ -61,7 +67,7 @@ public class SkypeCraft
 							Minecraft.getMinecraft().thePlayer.sendChatToPlayer("§6" + "[SK] §a" + arg0.getPartnerDisplayName() + 
 									"§6 is calling you. /sanswer to answer this call.");
 			        	}
-						ringingCall = arg0;
+						setRingingCall(arg0);
 					}
 					
 					@Override
@@ -83,11 +89,51 @@ public class SkypeCraft
                 
         }
         
-        static Call ringingCall;
+        @ServerStarting
+        public void serverStarting(FMLServerStartingEvent event) {
+        	
+        	//Try to enable silent mode to prevent popups - !This only works on Windows!
+        	try {
+				SkypeClient.setSilentMode(true);
+			} catch (CommandFailedException cfe) {
+				
+			} catch (SkypeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();				
+			}
+        }
+
+        @ServerStopping
+        public void serverStopping(FMLServerStoppingEvent event) {
+        	
+        	//Try to disable silent mode to allow popups - !This only works on Windows!
+        	try {
+				SkypeClient.setSilentMode(false);
+			} catch (CommandFailedException cfe) {
+				
+			} catch (SkypeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();				
+			}
+        }
         
-         final String COLOR_GEN = "§6";
-         final String COLOR_NAME = "§2";
-         final String COLOR_NAME2 = "§a";
-         final String COLOR_NUM = "§5";
+        
+        
+        
+        /**
+		 * @return the ringingCall
+		 */
+		public static Call getRingingCall() {
+			return ringingCall;
+		}
+
+		/**
+		 * @param ringingCall the ringingCall to set
+		 */
+		public static void setRingingCall(Call ringingCall) {
+			SkypeCraft.ringingCall = ringingCall;
+		}
+
+		private static Call ringingCall;
         
 }

@@ -1,4 +1,6 @@
-package tschrock.mc.skypecraft;
+package tschrock.mc.skypecraft.commands;
+
+import tschrock.mc.skypecraft.SkypeCraft;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -8,7 +10,7 @@ import com.skype.Skype;
 import com.skype.SkypeException;
 
 
-public class Command_SAnswer  extends CommandBase
+public class Sanswer extends CommandBase
 {
     @Override
     public String getCommandName()
@@ -20,8 +22,8 @@ public class Command_SAnswer  extends CommandBase
     public void processCommand(ICommandSender sender, String[] arguments)
     {
     	try {
-			if (SkypeCraft.ringingCall.getStatus() == Call.Status.RINGING){
-				SkypeCraft.ringingCall.answer();
+			if (SkypeCraft.getRingingCall().getStatus() == Call.Status.RINGING){
+				SkypeCraft.getRingingCall().answer();
 			}
 			else {
     			sender.sendChatToPlayer("No call to answer!");				

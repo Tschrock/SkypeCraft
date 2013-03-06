@@ -1,11 +1,11 @@
-package tschrock.mc.skypecraft;
+package tschrock.mc.skypecraft.commands;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import com.skype.Skype;
 import com.skype.SkypeException;
 
-public class Command_STell  extends CommandBase
+public class Stell  extends CommandBase
 {
     @Override
     public String getCommandName()

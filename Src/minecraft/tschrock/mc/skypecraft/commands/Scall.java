@@ -1,4 +1,4 @@
-package tschrock.mc.skypecraft;
+package tschrock.mc.skypecraft.commands;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -8,7 +8,7 @@ import com.skype.Friend;
 import com.skype.Skype;
 import com.skype.SkypeException;
 
-public class Command_SCall   extends CommandBase
+public class Scall   extends CommandBase
 {
     @Override
     public String getCommandName()
